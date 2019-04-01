@@ -4,7 +4,7 @@
 #include <iostream>
 #include <math.h>
 
-int main(int argc, char *argv[])
+int maint(int argc, char *argv[])
 {
 	int n, myid, numprocs, i; 
 	double PI25DT = 3.141592653589793238462643; 

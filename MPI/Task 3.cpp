@@ -4,23 +4,31 @@
 #include <iostream>
 #include <math.h>
 
-int maint(int argc, char *argv[])
+using namespace std;
+
+int main(int argc, char *argv[])
 {
-	int n, myid, numprocs, i; 
+	int n, rank, size, i, resultlen; 
 	double PI25DT = 3.141592653589793238462643; 
 	double mypi, pi, h, sum, x, starttime; 
+	char *name = new char[MPI_MAX_PORT_NAME];
 
 	MPI_Init(&argc, &argv);
-	MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
-	MPI_Comm_rank(MPI_COMM_WORLD, &myid);
+	
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	MPI_Get_processor_name(name, &resultlen);
+	cout << "Process number " << rank << " started on computer '" << name << "'" << endl;
+	MPI_Barrier(MPI_COMM_WORLD);
+	fflush(stdout);
 
-	while (1)
+	do
 	{
 		starttime = MPI_Wtime();
-		if (myid == 0) {
-			printf("Enter n: ");
+		if (rank == 0) {
+			cout << "Enter the number of intervals (0 for exit): ";
 			fflush(stdout);
-			scanf("%d", &n);
+			cin >> n;
 		}
 
 		MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -29,20 +37,21 @@ int maint(int argc, char *argv[])
 			sum = 0.0;
 			h = 2 * n;
 
-			for (i = myid + 1; i <= n; i += numprocs) {
+			for (i = rank + 1; i <= n; i += size) {
 				x = (2 * i - 1) / h;
 				sum += (4.0 / (1.0 + x * x));
 			}
 
-			sum = 1 / n * sum;
+			sum = 1.0 / n * sum;
+			fflush(stdout);
 			MPI_Reduce(&sum, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD); 
 
-			if (myid == 0) {
-				printf("Result: %.16f. Error: %.16f. Work time: %f\n", pi, fabs(pi - PI25DT), MPI_Wtime() - starttime);
+			if (rank == 0) {
+				cout << "Result: " << pi << " Error: " << fabs(pi - PI25DT) << " Running time: " << MPI_Wtime() - starttime << endl;
 				fflush(stdout);
 			}
 		}
-	}
+	}while (n != 0);
 
 	MPI_Finalize(); 
 	return 0;

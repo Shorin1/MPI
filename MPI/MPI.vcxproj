@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Task 3.cpp" />
     <ClCompile Include="Task_1.cpp" />
     <ClCompile Include="Task_2.cpp" />
   </ItemGroup>

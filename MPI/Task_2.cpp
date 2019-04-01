@@ -5,14 +5,13 @@
 
 using namespace std;
 
-int main(int * argc, char ***argv){
+int maind(int * argc, char ***argv){
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
 	int rank, resultlen;
 	int* buffer = (int*) malloc(sizeof(int));
 	char name[MPI_MAX_PROCESSOR_NAME];
-	int i = 0;
 
 	MPI_Init(argc, argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);

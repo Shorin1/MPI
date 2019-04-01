@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	{
 		starttime = MPI_Wtime();
 		if (myid == 0) {
-			printf("Enter the number of intervals: (0 quits) ");
+			printf("Enter n: ");
 			fflush(stdout);
 			scanf("%d", &n);
 		}
@@ -26,16 +26,16 @@ int main(int argc, char *argv[])
 		MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 		if (n != 0) {
-			h = 1.0 / (double)n; 
 			sum = 0.0;
+			h = 2 * n;
 
 			for (i = myid + 1; i <= n; i += numprocs) {
-				x = h * ((double)i - 0.5);
+				x = (2 * i - 1) / h;
 				sum += (4.0 / (1.0 + x * x));
 			}
 
-			mypi = h * sum; 
-			MPI_Reduce(&mypi, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD); 
+			sum = 1 / n * sum;
+			MPI_Reduce(&sum, &pi, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD); 
 
 			if (myid == 0) {
 				printf("Result: %.16f. Error: %.16f. Work time: %f\n", pi, fabs(pi - PI25DT), MPI_Wtime() - starttime);
@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+
 	MPI_Finalize(); 
 	return 0;
 }

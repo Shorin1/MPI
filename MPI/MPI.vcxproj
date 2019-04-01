@@ -79,8 +79,8 @@
     <LibraryPath>D:\msmpi\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\msmpi\Include\x64;D:\msmpi\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\msmpi\Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Mpi\Include\x64;D:\Mpi\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Mpi\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

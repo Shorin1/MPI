@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 		cout << "Rank = " << rank << " size = " << size << endl;
 		fflush(stdout);
 		MPI_Send(sendArr, 30, MPI_CHAR,  rank + 1, rank + 1, MPI_COMM_WORLD);
-		cout << "Sending data to cicle. Sending time: " << MPI_Wtime() - starttime << endl;
+		cout << "Sending data to loop. Sending time: " << MPI_Wtime() - starttime << endl;
 		fflush(stdout);
 		MPI_Recv(recArr, 30, MPI_CHAR, size - 1, rank, MPI_COMM_WORLD, MPI_STATUSES_IGNORE);
 		cout << "Process nummber: " << rank << " receive data: '" << recArr << "' from process: " << size - 1

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int maind(int * argc, char ***argv){
+int main2(int * argc, char ***argv){
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 

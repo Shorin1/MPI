@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int maint(int * argc, char ***argv)
+int main1(int * argc, char ***argv)
 {
 	int rank, size, resultlen;
 	char name[MPI_MAX_PROCESSOR_NAME];

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int maint(int argc, char **argv) {
+int main4(int argc, char **argv) {
 	MPI_Init(&argc, &argv);
 
 	int rank;

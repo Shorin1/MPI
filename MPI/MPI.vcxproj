@@ -23,6 +23,7 @@
     <ClCompile Include="Task_1.cpp" />
     <ClCompile Include="Task_2.cpp" />
     <ClCompile Include="Task_4.cpp" />
+    <ClCompile Include="Task_5.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -80,8 +81,8 @@
     <LibraryPath>D:\msmpi\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Mpi\Include\x64;D:\Mpi\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Mpi\Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\msmpi\Include\x64;D:\msmpi\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\msmpi\Lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

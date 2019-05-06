@@ -9,7 +9,7 @@
 #define PROCESS_COUNT 4
 #define ROOT_PROCESS 0
 
-int main(int argc, char **argv) {
+int main5(int argc, char **argv) {
 	int rank, iterations_count;
 	int first_row, last_row;
 	MPI_Status status;

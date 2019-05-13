@@ -1,7 +1,7 @@
 #include<mpi.h>
 #include<stdio.h>
 #define NUM_DIMS 1
-int main(int argc, char **argv)
+int main7(int argc, char **argv)
 {
 	int rank, size, i, A, B, dims[NUM_DIMS];
 	int periods[NUM_DIMS], new_coords[NUM_DIMS];

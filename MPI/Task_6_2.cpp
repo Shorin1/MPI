@@ -2,7 +2,7 @@
 #include<stdio.h>
 #define NUM_DIMS 1
 
-int main(int argc, char **argv)
+int main6_2(int argc, char **argv)
 {
 	int rank, size, i, A, dims[NUM_DIMS];
 	int periods[NUM_DIMS], source, dest;

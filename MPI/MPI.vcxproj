@@ -27,6 +27,9 @@
     <ClCompile Include="Task_6_1.cpp" />
     <ClCompile Include="Task_6_2.cpp" />
     <ClCompile Include="Task_7.cpp" />
+    <ClCompile Include="Task_8.cpp" />
+    <ClCompile Include="task_8_1.cpp" />
+    <ClCompile Include="Task_8_2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

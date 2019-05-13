@@ -1,8 +1,11 @@
 #include<mpi.h>
 #include<stdio.h>
+#include<iostream>
 #define NUM_DIMS 1
 
-int main(int argc, char **argv)
+using namespace std;
+
+int main6_1(int argc, char **argv)
 {
 	int rank, size, i, A, B, dims[NUM_DIMS];
 	int periods[NUM_DIMS], source, dest;
@@ -28,6 +31,7 @@ int main(int argc, char **argv)
 	с большим рангом и принимает данные в B от соседней ветви с меньшим рангом.
 	Ветвь с рангом size-1 передает свои данные ветви с рангом 0, а ветвь 0 принимает
 	данные от ветви size-1. */
+	cout << "rank: " << rank << " source: " << source << " dest: " << dest << endl;
 	MPI_Sendrecv(&A, 1, MPI_INT, dest, 12, &B, 1, MPI_INT, source, 12, comm_cart, &status);
 	/* Каждая ветвь печатает свой ранг (он же и был послан соседней ветви с большим рангом и значение
 	переменной B (ранг соседней ветви с меньшим рангом). */

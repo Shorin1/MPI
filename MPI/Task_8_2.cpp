@@ -4,12 +4,34 @@
 
 using namespace std;
 
+void multMatrix(int** arrA, int** arrB, int n, int m, int l) {
+	int result;
+
+	for (int i = 0; i < l; i++) {
+		for (int j = 0; j < n; j++) {
+
+			result = 0;
+
+			for (int z = 0; z < m; z++) {
+				result += arrA[i][z] * arrB[z][j];
+			}
+
+			cout << result << " ";
+		}
+	}
+
+	cout << endl;
+}
+
 void main(int argc, char **argv) {
 	int n = 0, m = 0, l = 0; // n - количство строк, m - длина строки, l - количество строк в матрице
 	int rank, size;
-	int **arrA;
-	int **arrB;
+	int **arrA = NULL;
+	int **arrB = NULL;
+	int countProcess;
+
 	MPI_Status status;
+	MPI_Comm comm_cart;
 
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -19,7 +41,7 @@ void main(int argc, char **argv) {
 		fstream fa("a.txt");
 		fa >> n >> m;
 
-		arrA = new int*[n];
+		arrA = new int* [n];
 
 		for (int i = 0; i < n; i++) { // read matrix a
 			arrA[i] = new int[m];
@@ -33,7 +55,7 @@ void main(int argc, char **argv) {
 		fa.close();
 
 		fstream fb("b.txt");
-		arrB = new int*[m];
+		arrB = new int* [m];
 
 		for (int i = 0; i < m; i++) { // read matrix b
 			arrB[i] = new int[n];
@@ -46,16 +68,44 @@ void main(int argc, char **argv) {
 
 		fb.close();
 
-		if (n < size - 1) { // Если количество строк меньше чем процессов
+		if (n <= size) {
+			countProcess = n;
+		}
+		else {
+			countProcess = size;
+		}
+
+		for (int i = 1; i < size; i++) {
+			MPI_Send(&n, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+			MPI_Send(&m, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+			MPI_Send(&countProcess, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+		}
+	}
+	else {
+		MPI_Recv(&n, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием m
+		MPI_Recv(&m, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием m
+		MPI_Recv(&countProcess, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием m
+	}
+
+
+
+	if (rank == 0) {
+
+		if (n <= size) { // Если количество строк меньше чем процессов
 			l = 1;
 
-			for (int i = 1; i < n + 1; i++) {
+			for (int i = 1; i < n; i++) {
 				MPI_Send(&l, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
-				MPI_Send(&n, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
-				MPI_Send(&m, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+			}
+
+			int result;
+
+			multMatrix(arrA, arrB, n, m, 1);
+
+			for (int i = 1; i < n; i++) {
 
 				for (int j = 0; j < m; j++) {
-					MPI_Send(&arrA[i - 1][j], 1, MPI_INT, i, 1, MPI_COMM_WORLD); // отправка самой матрицы
+					MPI_Send(&arrA[i][j], 1, MPI_INT, i, 1, MPI_COMM_WORLD);
 				}
 
 			}
@@ -67,31 +117,21 @@ void main(int argc, char **argv) {
 
 			for (int i = 1; i < size - 1; i++) { // Отправка l, m всем матрицам
 				MPI_Send(&l, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
-				MPI_Send(&m, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
-
-				for (int j = 0; j < l; i++) {
-
-					for (int z = 0; z < m; z++) {
-						MPI_Send(&arrA[i][z], 1, MPI_INT, i, 1, MPI_COMM_WORLD); // отправка самой матрицы
-					}
-
-				}
 			}
 
-			l = ((double)(n % (size - 1)));
+			int c = n % (size - 1);
+			int result;
 
-			MPI_Send(&l, 1, MPI_INT, size - 1, 1, MPI_COMM_WORLD);
-			MPI_Send(&m, 1, MPI_INT, size - 1, 1, MPI_COMM_WORLD);
+			multMatrix(arrA, arrB, n, m, c);
 
-			for (int i = 0; i < l; i++) {
+			for (int i = c; i < n; i++) {
 
 				for (int j = 0; j < m; j++) {
-					MPI_Send(&arrA[i][j], 1, MPI_INT, size - 1, 1, MPI_COMM_WORLD);
+					MPI_Send(&arrA[i][j], 1, MPI_INT, i - c + 1, 1, MPI_COMM_WORLD);
 				}
 
 			}
 		}
-
 
 		for (int i = 0; i < m; i++) {
 
@@ -102,50 +142,34 @@ void main(int argc, char **argv) {
 		}
 
 	}
-	else {
+	else if (rank < countProcess) {
 
-		MPI_Recv(&l, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием l
-		MPI_Recv(&n, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием m
-		MPI_Recv(&m, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием m
+		MPI_Recv(&l, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
 
-		arrA = new int*[l];
+		arrA = new int* [l];
 
 		for (int i = 0; i < l; i++) {
 			arrA[i] = new int[m];
 
 			for (int j = 0; j < m; j++) {
-				MPI_Recv(&arrA[i][j], 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status); // Прием матрицы а
+				MPI_Recv(&arrA[i][j], 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
 			}
 		}
 
-
-
-
-		arrB = new int*[m];
+		arrB = new int* [m];
 
 		for (int i = 0; i < m; i++) {
 			arrB[i] = new int[n];
 
 			for (int j = 0; j < n; j++) {
-				MPI_Recv(&arrB[i][j], 1, MPI_INT, rank - 1, 1, MPI_COMM_WORLD, &status); // прием матрицы б
+				MPI_Recv(&arrB[i][j], 1, MPI_INT, rank - 1, 1, MPI_COMM_WORLD, &status);
 			}
 		}
 
+		multMatrix(arrA, arrB, n, m, l);
 
-		int result;
-		for (int i = 0; i < l; i++) {
-			for (int j = 0; j < n; j++) {
-				result = 0;
-				for (int z = 0; z < m; z++) {
-					result += arrA[i][z] * arrB[z][j];
-				}
-				cout << result << " ";
-			}
-		}
+		if (rank < countProcess - 1) {
 
-		cout << endl;
-
-		if (rank != size - 1) {
 			for (int i = 0; i < m; i++) {
 
 				for (int j = 0; j < n; j++) {
@@ -153,10 +177,10 @@ void main(int argc, char **argv) {
 				}
 
 			}
-		}
 
+		}
 	}
+
 
 	MPI_Finalize();
 }
-

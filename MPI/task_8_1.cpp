@@ -10,7 +10,7 @@ using namespace std;
 #define NUM_DIMS 1
 const int N1 = 100, M1 = 100;
 static double A[N1][M1], B[N1][M1], C[N1][N1];
-int main81(int argc, char **argv)
+int main8_1(int argc, char **argv)
 {
 	int rank, size, i, j, k, i1, j1, d, sour, dest;
 	int N, M;
@@ -28,7 +28,7 @@ int main81(int argc, char **argv)
 	{
 		/*Читаем матрицу A из файла A.txt, расположенного в папке с исполняемым файлом нулевого компьютера
 		N и M располочены там же*/
-		fstream fa ("a.txt");
+		fstream fa("a.txt");
 		fa >> N >> M;
 		/* Передаем N и M всем комьютерам */
 		for (i = 1; i < size; i++)

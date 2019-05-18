@@ -18,13 +18,11 @@ void multMatrix(int** arrA, int** arrB, int n, int m, int l) {
 
 			cout << result << " ";
 		}
+		cout << endl;
 	}
-
-	cout << endl;
 }
 
 void main(int argc, char **argv) {
-	int n = 0, m = 0, l = 0; // n - количство строк, m - длина строки, l - количество строк в матрице
 	int rank, size;
 	int **arrA = NULL;
 	int **arrB = NULL;
@@ -90,8 +88,10 @@ void main(int argc, char **argv) {
 
 
 	if (rank == 0) {
-
-		if (n <= size) { // Если количество строк меньше чем процессов
+		if (size == 1) {
+			multMatrix(arrA, arrB, n, m, n);
+		} 
+		else if (n <= size) { // Если количество строк меньше чем процессов
 			l = 1;
 
 			for (int i = 1; i < n; i++) {
@@ -112,10 +112,10 @@ void main(int argc, char **argv) {
 
 		}
 		else { // Если количество строк больше чем процессов
+			
+			l = n / (size - 1);
 
-			l = (double)(n / (size - 1));
-
-			for (int i = 1; i < size - 1; i++) { // Отправка l, m всем матрицам
+			for (int i = 1; i < size; i++) { // Отправка l, m всем матрицам
 				MPI_Send(&l, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
 			}
 
@@ -124,19 +124,27 @@ void main(int argc, char **argv) {
 
 			multMatrix(arrA, arrB, n, m, c);
 
-			for (int i = c; i < n; i++) {
+			for (int i = 1; i < size; i++) {
 
-				for (int j = 0; j < m; j++) {
-					MPI_Send(&arrA[i][j], 1, MPI_INT, i - c + 1, 1, MPI_COMM_WORLD);
+				for (int z = 0; c < n && z < l; z++, c++) {
+
+					for (int j = 0; j < m; j++) {
+						MPI_Send(&arrA[c][j], 1, MPI_INT, i, 1, MPI_COMM_WORLD);
+					}
+
 				}
 
 			}
 		}
 
-		for (int i = 0; i < m; i++) {
+		if (size != 1) {
 
-			for (int j = 0; j < n; j++) {
-				MPI_Send(&arrB[i][j], 1, MPI_INT, 1, 1, MPI_COMM_WORLD);
+			for (int i = 0; i < m; i++) {
+
+				for (int j = 0; j < n; j++) {
+					MPI_Send(&arrB[i][j], 1, MPI_INT, 1, 1, MPI_COMM_WORLD);
+				}
+
 			}
 
 		}

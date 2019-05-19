@@ -22,7 +22,7 @@ void multMatrix(int** arrA, int** arrB, int n, int m, int l) {
 	}
 }
 
-void main(int argc, char **argv) {
+void main8_2(int argc, char **argv) {
 	int n = 0, m = 0, l = 0; // n - количство строк, m - длина строки, l - количество строк в матрице
 	int rank, size;
 	int **arrA = NULL;

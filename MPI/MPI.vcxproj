@@ -32,6 +32,10 @@
     <ClCompile Include="Task_9_1.cpp" />
     <ClCompile Include="Task_9_3.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\x64\Debug\a.txt" />
+    <Text Include="..\x64\Debug\b.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D052F6FE-EE34-4799-A632-9E2BAD71A593}</ProjectGuid>

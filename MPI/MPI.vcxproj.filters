@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="txt">
+      <UniqueIdentifier>{eeb4ad26-d245-419e-a6af-45f6d0b64d38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Task_1.cpp">
@@ -51,5 +54,13 @@
     <ClCompile Include="Task_9_3.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\x64\Debug\a.txt">
+      <Filter>txt</Filter>
+    </Text>
+    <Text Include="..\x64\Debug\b.txt">
+      <Filter>txt</Filter>
+    </Text>
   </ItemGroup>
 </Project>

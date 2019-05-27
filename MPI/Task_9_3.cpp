@@ -71,12 +71,28 @@ void substraction() {
 }
 
 void reverse() {
-	for (int i = n - 1; i >= 0; i--) {
-		result[i] = b[i];
+	//cout << "B:" << endl;
 
-		for (int j = 0; j < i; j++) {
-			b[j] = b[j] - a[j][i] * result[i];
+	//for (int i = 0; i < n; i++) {
+	//	cout << b[i] << " ";
+	//}
+
+	//for (int i = n - 1; i >= 0; i--) {
+	//	result[i] = b[i];
+
+	//	for (int j = 0; j < i; j++) {
+	//		b[j] -= a[j][i] * result[i];
+	//	}
+	//}
+
+	for (int i = n - 1; i >= 0; i--) {
+		result[i] = 0.0;
+
+		for (j = i; j < n - 1; j++) {
+			result[i] -= result[j + 1] * a[i][j + 1];
 		}
+
+		result[i] += b[i];
 	}
 }
 
@@ -149,5 +165,6 @@ int main()
 	gauss();
 	printAll();
 
+	cin >> n;
 	return 0;
 }
